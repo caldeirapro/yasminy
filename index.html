@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yasminy ❤️ Daniel</title>
+  <style>
+    /* Estilos gerais e efeito parallax no background */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #FFC1CC, #FF8DAA);
+      color: #333;
+      background-attachment: fixed;
+      overflow-x: hidden;
+    }
+    header {
+      background: rgba(255,255,255,0.8);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.8em;
+      color: #C2185B;
+      cursor: pointer;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
+    nav ul li {
+      margin-left: 20px;
+      cursor: pointer;
+      position: relative;
+      color: #C2185B;
+    }
+    nav ul li::after {
+      content: '';
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      background: #C2185B;
+      bottom: -4px;
+      left: 0;
+      transition: width 0.3s;
+    }
+    nav ul li:hover::after {
+      width: 100%;
+    }
+    section {
+      padding: 60px 20px;
+    }
+    /* Elementos h2: exibem o texto inicial e possuem efeito de máquina de escrever no hover */
+    h2 {
+      text-align: center;
+      color: #C2185B;
+      white-space: nowrap;
+      overflow: hidden;
+      cursor: pointer;
+      border-right: 2px solid #C2185B;
+      font-size: 2em;
+      margin-bottom: 40px;
+    }
+    /* Seção de contadores */
+    .counter-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .counter {
+      background: rgba(255,255,255,0.9);
+      border-radius: 10px;
+      padding: 20px;
+      width: 300px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    .counter:hover {
+      transform: scale(1.05);
+    }
+    .counter h3 {
+      margin-top: 0;
+      color: #C2185B;
+    }
+    .counter p {
+      font-size: 1.2em;
+      margin: 10px 0;
+    }
+    /* Seção de fotos */
+    .photos-section, .phrases-section {
+      text-align: center;
+    }
+    .photos-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .photo-frame {
+      width: 200px;
+      height: 200px;
+      border: 5px solid #C2185B;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.3s;
+      background: #fff;
+      cursor: pointer;
+    }
+    .photo-frame:hover {
+      transform: scale(1.1);
+    }
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    /* Seção de frases */
+    .phrases-container {
+      margin-top: 20px;
+    }
+    .phrase {
+      background: rgba(255,255,255,0.8);
+      margin: 10px auto;
+      padding: 15px;
+      max-width: 600px;
+      border-left: 5px solid #C2185B;
+      font-weight: bold;
+      cursor: pointer;
+      position: relative;
+    }
+    /* A mensagem oculta inicia com opacidade 0 e sem espaço, transicionando para visível */
+    .phrase .hidden-message {
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: opacity 0.5s ease, max-height 0.5s ease;
+      margin-top: 10px;
+      background: #fff;
+      padding: 0 10px;
+      border-left: 3px solid #C2185B;
+      border-radius: 5px;
+      font-style: italic;
+      color: #C2185B;
+    }
+    .phrase .hidden-message.visible {
+      opacity: 1;
+      max-height: 200px;
+      padding: 10px;
+    }
+    /* Seção da Linha do Tempo Interativa */
+    #timeline {
+      padding: 60px 20px;
+      background: rgba(255,255,255,0.7);
+    }
+    .timeline-container {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      padding: 20px;
+    }
+    .timeline-item {
+      margin: 20px 0;
+      position: relative;
+      padding-left: 60px;
+      cursor: default;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 5px;
+      width: 20px;
+      height: 20px;
+      background: #C2185B;
+      border-radius: 50%;
+    }
+    .timeline-item .event-title {
+      font-weight: bold;
+      color: #C2185B;
+    }
+    .timeline-item .tooltip {
+      display: none;
+      position: absolute;
+      left: 70px;
+      top: 0;
+      background: rgba(255,255,255,0.9);
+      padding: 10px;
+      border: 1px solid #C2185B;
+      border-radius: 5px;
+      z-index: 10;
+      white-space: normal;
+    }
+    .timeline-item:hover .tooltip {
+      display: block;
+    }
+    /* Rodapé */
+    footer {
+      background: rgba(255,255,255,0.8);
+      text-align: center;
+      padding: 20px;
+      position: relative;
+    }
+    footer p {
+      margin: 10px 0;
+      font-weight: bold;
+      color: #C2185B;
+    }
+    footer .heart {
+      font-size: 2em;
+      color: #C2185B;
+      animation: heartbeat 1.5s infinite;
+      cursor: pointer;
+    }
+    @keyframes heartbeat {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.2); }
+      50% { transform: scale(1); }
+      75% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    /* Animação dos corações de confete */
+    @keyframes confetti {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(0, -100px) scale(1.5);
+      }
+    }
+    .confetti-heart {
+      position: fixed;
+      pointer-events: none;
+      color: #C2185B;
+      font-size: 20px;
+      animation: confetti 1.5s ease-out forwards;
+    }
+    /* Animação de partículas de coração seguindo o mouse */
+    @keyframes mouseHeart {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(0, -50px) scale(1.5);
+      }
+    }
+    .mouse-heart {
+      position: absolute;
+      pointer-events: none;
+      color: #C2185B;
+      font-size: 16px;
+      animation: mouseHeart 1s ease-out forwards;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 onclick="alert('Te amo! ❤️❤️❤️')">Yasminy ❤️ Daniel</h1>
+    <nav>
+      <ul>
+        <li onclick="scrollToSection('counters')">Contador</li>
+        <li onclick="scrollToSection('timeline')">Linha do Tempo</li>
+        <li onclick="scrollToSection('photos')">Momentos</li>
+        <li onclick="scrollToSection('phrases')">Lembretes</li>
+        <li onclick="scrollToSection('footer')">❤️</li>
+      </ul>
+    </nav>
+  </header>
+  
+  <!-- Seção de contadores -->
+  <section id="counters" onclick="alert('Te amo! ❤️❤️❤️')">
+    <h2 data-text="Nosso contador amoroso 🥰">Nosso contador amoroso 🥰</h2>
+    <div class="counter-section">
+      <div class="counter" data-date="2025-03-10T00:00:00">
+        <h3>Voltamos a nos falar</h3>
+        <p id="counter-1">Calculando...</p>
+      </div>
+      <div class="counter" data-date="2025-03-14T00:00:00">
+        <h3>Primeiro date</h3>
+        <p id="counter-2">Calculando...</p>
+      </div>
+      <div class="counter" data-date="2025-03-15T00:00:00">
+        <h3>Primeiro beijo</h3>
+        <p id="counter-3">Calculando...</p>
+      </div>
+      <div class="counter" data-date="2025-03-16T00:00:00">
+        <h3>Primeiro andar de mãos dadas</h3>
+        <p id="counter-4">Calculando...</p>
+      </div>
+      <div class="counter" data-date="2025-03-17T00:00:00">
+        <h3>Primeira noite adulta</h3>
+        <p id="counter-5">Calculando...</p>
+      </div>
+      <div class="counter" data-date="2025-03-22T00:00:00">
+        <h3>Tempo do melhor namoro do mundo</h3>
+        <p id="counter-6">Calculando...</p>
+      </div>
+      <div class="counter" data-date="2025-03-29T00:00:00">
+        <h3>Primeira vez que eu disse que a amava</h3>
+        <p id="counter-7">Calculando...</p>
+      </div>
+      <div class="counter" data-date="2025-03-30T00:00:00">
+        <h3>Primeira vez que usou minha camisa</h3>
+        <p id="counter-8">Calculando...</p>
+      </div>
+      <div class="counter" data-date="2025-04-01T00:00:00">
+        <h3>Nossa primeira chamada de voz</h3>
+        <p id="counter-9">Calculando...</p>
+      </div>
+      <div class="counter" data-date="2025-04-01T00:00:00">
+        <h3>Primeira vez que ela disse que me ama</h3>
+        <p id="counter-10">Calculando...</p>
+      </div>
+      <div class="counter" data-date="2025-10-11T00:00:00">
+        <h3>Aniversário</h3>
+        <p id="counter-11">Calculando...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção da Linha do Tempo Interativa -->
+  <section id="timeline">
+    <h2 data-text="Nossa linha do tempo 💗">Nossa linha do tempo 💗</h2>
+    <div class="timeline-container">
+      <div class="timeline-item">
+        <div class="event-title">10/03/2025 - Nós reconectamos</div>
+        <div class="tooltip">O dia que começamos a nos reconectar.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="event-title">14/03/2025 - Nosso primeiro date</div>
+        <div class="tooltip">Nosso primeiro encontro inesquecível.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="event-title">15/03/2025 - Nosso primeiro beijo</div>
+        <div class="tooltip">O primeiro beijo que nos selou.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="event-title">16/03/2025 - Nossa primeira vez de mãos dadas</div>
+        <div class="tooltip">Sentimos a conexão e o calor de nossas mãos unidas.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="event-title">17/03/2025 - Você sabe, rsrs</div>
+        <div class="tooltip">Uma noite cheia de emoções e descobertas.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="event-title">22/03/2025 - Eu pedi a mulher mais maravilhosa do mundo em namoro</div>
+        <div class="tooltip">Cada momento juntos é mágico.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="event-title">29/03/2025 - Disse que te amava</div>
+        <div class="tooltip">O dia em que expressei meus sentimentos mais profundos.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="event-title">30/03/2025 - Você usou minha camisa pela primeira vez</div>
+        <div class="tooltip">Um momento simples que se tornou especial.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="event-title">01/04/2025 - Nossa primeira chamada de voz</div>
+        <div class="tooltip">Uma ligação que mudou tudo.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="event-title">01/04/2025 - Você disse que me amava</div>
+        <div class="tooltip">As palavras que aqueceram meu coração.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="event-title">11/10/2025 - Seu aniversário</div>
+        <div class="tooltip">Celebrando o dia em que você nasceu.</div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Seção de fotos -->
+  <section id="photos" class="photos-section" onclick="alert('Te amo! ❤️❤️❤️')">
+    <h2 data-text="Nossos momentos 😍">Nossos momentos 😍</h2>
+    <div class="photos-container">
+      <div class="photo-frame">
+        <img src="IMG-20250407-WA0014sss.jpg" alt="Foto 1">
+      </div>
+      <div class="photo-frame">
+        <img src="IMG-20250407-WA0017.jpg" alt="Foto 2">
+      </div>
+      <div class="photo-frame">
+        <img src="IMG-20250407-WA0024.jpg" alt="Foto 3">
+      </div>
+      <div class="photo-frame">
+        <img src="IMG-20250407-WA0027ssss.jpg" alt="Foto 4">
+      </div>
+      <div class="photo-frame">
+        <img src="IMG-20250407-WA0021.jpg" alt="Foto 5">
+      </div>
+    </div>
+  </section>
+  
+  <!-- Seção de frases -->
+  <section id="phrases" class="phrases-section">
+    <h2 data-text="Nunca esqueça 👩🏻‍❤️‍💋‍👨🏻 (Clica nas frases)">Nunca esqueça 👩🏻‍❤️‍💋‍👨🏻 (Clica nas frases)</h2>
+    <div class="phrases-container">
+      <div class="phrase">
+        "Você é a melhor e mais intensa primavera que me aconteceu."
+        <div class="hidden-message">Surpresa! Cada dia ao seu lado é um novo florescer.</div>
+      </div>
+      <div class="phrase">
+        "Nem Obliviate me faz esquecer você."
+        <div class="hidden-message">Segredo: Você está gravada no meu coração para sempre.</div>
+      </div>
+      <div class="phrase">
+        "Eu só quero se for com você."
+        <div class="hidden-message">A verdade: Meu futuro é contigo, hoje e sempre.</div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Rodapé -->
+  <footer id="footer">
+    <p>Clica no meu coração quando você tá perto</p>
+    <div class="heart" onclick="alert('Te amo! ❤️❤️❤️')">❤️</div>
+  </footer>
+  
+  <script>
+    // Função para scroll suave entre seções
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // Atualiza os contadores a cada segundo
+    function updateCounters() {
+      const counters = document.querySelectorAll('.counter');
+      const now = new Date().getTime();
+      counters.forEach(counter => {
+        const eventDate = new Date(counter.getAttribute('data-date')).getTime();
+        let distance = now - eventDate;
+        let prefix = "";
+        if(distance < 0) {
+          distance = Math.abs(distance);
+          prefix = "Faltam ";
+        } else {
+          prefix = "Já se passaram ";
+        }
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        counter.querySelector('p').innerText = prefix + days + " dias, " + hours + " horas, " + minutes + " minutos e " + seconds + " segundos.";
+      });
+    }
+    setInterval(updateCounters, 1000);
+    updateCounters();
+    
+    // Função de máquina de escrever com proteção contra reinício
+    function typeWriter(element, text, speed = 100) {
+      if (element.dataset.typing === "true") return; // Evita reiniciar se já estiver rodando
+      element.dataset.typing = "true";
+      element.innerHTML = ""; // Limpa o conteúdo
+      element.style.borderRight = "2px solid #C2185B";
+      let i = 0;
+      let intervalId = setInterval(() => {
+        if (i < text.length) {
+          element.innerHTML += text.charAt(i);
+          i++;
+        } else {
+          clearInterval(intervalId);
+          element.style.borderRight = "none";
+          element.dataset.typing = "false";
+        }
+      }, speed);
+    }
+    
+    // Aplica o efeito ao passar o mouse sobre elementos h2 com data-text
+    document.addEventListener("DOMContentLoaded", function() {
+      document.querySelectorAll('h2[data-text]').forEach(el => {
+        if (!el.innerHTML.trim()) {
+          el.innerHTML = el.getAttribute('data-text');
+          el.style.borderRight = "none";
+        }
+        el.addEventListener('mouseenter', function() {
+          const fullText = el.getAttribute('data-text');
+          typeWriter(el, fullText, 100);
+        });
+      });
+    });
+    
+    // Efeito de corações de confete ao clicar nas fotos
+    document.querySelectorAll('.photo-frame').forEach(frame => {
+      frame.addEventListener('click', function(e) {
+        const x = e.clientX;
+        const y = e.clientY;
+        for (let i = 0; i < 10; i++) {
+          const heart = document.createElement('div');
+          heart.classList.add('confetti-heart');
+          heart.style.left = x + (Math.random() * 30 - 15) + "px";
+          heart.style.top = y + (Math.random() * 30 - 15) + "px";
+          heart.innerText = "❤️";
+          document.body.appendChild(heart);
+          setTimeout(() => { heart.remove(); }, 1500);
+        }
+      });
+    });
+    
+    // Alterna a exibição suave de mensagens ocultas nas frases
+    document.querySelectorAll('.phrase').forEach(phrase => {
+      phrase.addEventListener('click', function() {
+        const hidden = this.querySelector('.hidden-message');
+        hidden.classList.toggle('visible');
+      });
+    });
+    
+    // Efeito parallax no background
+    window.addEventListener('scroll', function() {
+      document.body.style.backgroundPositionY = -(window.pageYOffset * 0.5) + "px";
+    });
+    
+    // Partículas de coração seguindo o mouse
+    document.addEventListener('mousemove', function(e) {
+      const heart = document.createElement('div');
+      heart.classList.add('mouse-heart');
+      heart.style.left = e.pageX + "px";
+      heart.style.top = e.pageY + "px";
+      heart.innerText = "❤️";
+      document.body.appendChild(heart);
+      setTimeout(() => { heart.remove(); }, 1000);
+    });
+  </script>
+</body>
+</html>
