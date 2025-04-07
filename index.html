@@ -24,6 +24,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
+      flex-wrap: wrap;
     }
     header h1 {
       margin: 0;
@@ -141,7 +142,7 @@
       cursor: pointer;
       position: relative;
     }
-    /* A mensagem oculta inicia com opacidade 0 e sem espaço, transicionando para visível */
+    /* Mensagem oculta com transição suave */
     .phrase .hidden-message {
       opacity: 0;
       max-height: 0;
@@ -268,6 +269,60 @@
       animation: mouseHeart 1s ease-out forwards;
       z-index: 1000;
     }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav ul {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      nav ul li {
+        margin-left: 0;
+        margin-right: 10px;
+      }
+      h2 {
+        font-size: 1.8em;
+      }
+      .counter {
+        width: 90%;
+        max-width: 300px;
+      }
+      .photo-frame {
+        width: 180px;
+        height: 180px;
+      }
+      .phrase {
+        max-width: 90%;
+      }
+      .timeline-container {
+        padding: 10px;
+      }
+    }
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.5em;
+      }
+      nav ul {
+        flex-direction: column;
+      }
+      h2 {
+        font-size: 1.5em;
+      }
+      .counter {
+        width: 100%;
+      }
+      .photo-frame {
+        width: 150px;
+        height: 150px;
+      }
+      .phrase {
+        padding: 10px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -334,7 +389,7 @@
       </div>
     </div>
   </section>
-
+  
   <!-- Seção da Linha do Tempo Interativa -->
   <section id="timeline">
     <h2 data-text="Nossa linha do tempo 💗">Nossa linha do tempo 💗</h2>
@@ -434,7 +489,7 @@
   </footer>
   
   <script>
-    // Função para scroll suave entre seções
+    // Scroll suave entre seções
     function scrollToSection(id) {
       document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
     }
@@ -465,9 +520,9 @@
     
     // Função de máquina de escrever com proteção contra reinício
     function typeWriter(element, text, speed = 100) {
-      if (element.dataset.typing === "true") return; // Evita reiniciar se já estiver rodando
+      if (element.dataset.typing === "true") return;
       element.dataset.typing = "true";
-      element.innerHTML = ""; // Limpa o conteúdo
+      element.innerHTML = "";
       element.style.borderRight = "2px solid #C2185B";
       let i = 0;
       let intervalId = setInterval(() => {
